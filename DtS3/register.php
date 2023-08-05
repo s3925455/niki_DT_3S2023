@@ -221,6 +221,9 @@ session_start();
         //Close conncetion
         $stmt->close();
         $conn->close();
+
+        //Once completed go to shop.php web page
+        header('Location:login.php');
       }
 ?>
 

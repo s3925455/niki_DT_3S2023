@@ -199,6 +199,7 @@ session_start();
         $stmt->close();
         $conn->close();
       
+        //Once completed go to shop.php web page
         header('Location:shop.php');
       }
 

@@ -189,9 +189,9 @@ session_destroy();
 
       // Check connection
       if (!$dbc) {
-          die("~Connection failed:~ " . mysqli_connect_error());
+          die("  Connection failed:  " . mysqli_connect_error());
       } else {
-        echo "=connected to database=";
+        echo "  Connected to database  ";
       }
 
       // Set encoding to match PHP script encoding
@@ -203,14 +203,13 @@ session_destroy();
       // echo "-user name-";
       echo $username;
       $sql = "SELECT user_name, user_email, user_address FROM $dbtablename where user_name = '$username'";
-      // $sql = "SELECT user_id, user_name, user_password, user_first, user_last FROM student_info where user_name = '$username'";
       $result = mysqli_query($dbc, $sql) or die("Error: " . mysqli_error($dbc));
 
       $num = mysqli_num_rows($result);
       if ($num == 0) {
-          die(" - There are no users in your database table =");
+          die("  There are no users in your database table ");
       } else {
-          echo "~~There are $num members in the $tablename table~~";
+          // echo " There are $num members in the $tablename table ";
         
         // to extract sql values from the query into variables
           while($row = $result->fetch_assoc()){
@@ -220,21 +219,17 @@ session_destroy();
             $dbusername = $row["user_name"];
             $dbuseremail = $row["user_email"];
             $dbuseraddress = $row["user_address"];
-
             $_SESSION['user_name']=$dbusername;
             $_SESSION['user_email']=$dbuseremail;
             $_SESSION['user_address']=$dbuseraddress;
 
             if($dbusername == $username) {
             header('Location:shop.php');
-
-           }else{ 
+             }else{ 
             echo "password incorrect";
            }
           }    
       }
-
-
 
     ?>
 
