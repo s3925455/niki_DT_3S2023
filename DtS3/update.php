@@ -27,47 +27,32 @@ session_start();
     <img src="image/banner.jpg" alt="onlinebusiness Banner gif" />
     </header>
 
-
     <?php
-
       // define variables and set to empty values
       $nameErr = $addressErr = $emailErr = "";
       $name = $address = $email = "";
 
       //input field validation including PREG match with IF statement
       if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-      // if (empty($_POST["user_name"])) {
-      //   $nameErr = "Name is required";
-      // } else {
-      //   $name = test_input($_POST["user_name"]);
-      //   // check if name only contains letters and whitespace
-      //   if (!preg_match("/^[a-zA-Z0-9-' ]*$/", $name)) {
-
-       
-      //     $nameErr = "Only letters/numbers and white space allowed in name";
-      //   }
-      // }
-
-      if (empty($_POST["user_address"])) {
-        $addressErr = "Address is required";
-      } else {
-        $address = test_input($_POST["user_address"]);
-        // check if state only contains letters and whitespace
-        if (!preg_match("/[A-Za-z0-9\-\\,.]+/", $address)) {
-          // "/^[a-zA-Z-' ]*$/"
-          // /[A-Za-z0-9\-\\,.]+/
-          $addressErr = "Only letters and white space allowed in address";
+        if (empty($_POST["user_address"])) {
+          $addressErr = "Address is required";
+        } else {
+          $address = test_input($_POST["user_address"]);
+          // check if state only contains letters and whitespace
+          if (!preg_match("/[A-Za-z0-9\-\\,.]+/", $address)) {
+            // "/^[a-zA-Z-' ]*$/"
+            // /[A-Za-z0-9\-\\,.]+/
+            $addressErr = "Only letters and white space allowed in address";
+          }
         }
-      }
 
-      if (empty($_POST["user_email"])) {
-        $emailErr = "Email is required";
-      } else {
-        $email = test_input($_POST["user_email"]);
-        // check if postcode only contains numbers
-        if (!preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/", $email)) {
-          $emailErr = "Insert email in proper format";
+        if (empty($_POST["user_email"])) {
+          $emailErr = "Email is required";
+        } else {
+          $email = test_input($_POST["user_email"]);
+          // check if postcode only contains numbers
+          if (!preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/", $email)) {
+            $emailErr = "Insert email in proper format";
         }
       }
     }
@@ -94,14 +79,7 @@ session_start();
   <!--This is the navigation bar on the web page -->
   <nav>
           <ul>
-            <li> <a href="index.php">Home</Details></a></li>
-  
-            <!-- <li><a href="shop.php">Shop</a></li>           -->
-            
-            <!-- <li><a href="items.php">Items</a></li> -->
-            <!-- <li><a href="login.php">Login</a></li>    -->
-            
-            
+            <li> <a href="shop.php">Shop</Details></a></li>          
             <?php
             // //These links below will appear if the user has global admin rights. 
             // //This is desidned by user_name but ideally should be used with a role defined and better to reflect this in the table 
@@ -110,11 +88,9 @@ session_start();
                 if ($user_name === "aaa") {
                   echo '<li><a href="addproduct.php">Add Product</a></li>';
                   echo '<li><a href="admin_dashboard.php">Admin Dashboard</a></li>';
-                 echo "Logged in as admin to view 2 extra links";
+                  echo "Logged in as admin to view 2 extra links";
                 }
             ?>
-           <li><a href="contact.php">Contact</a></li>
-           <!-- <li><a href="update.php">Account Update</a></li> -->
            <li><a href="logout.php">log out</a></li>
             
           </ul>
@@ -129,23 +105,14 @@ session_start();
           <tr>
             <th></th>
             <th><h2>Customer Update</h2></th>
-            <th>
-              <?php
-              // Return current date from the remote server
-              $date = date('d-m-y');
-              echo "Date: ";
-              echo $date;
-              ?>
-              
-          </th>
+            <th></th>
           </tr>
           <tr>
             <td></td>
-            <td>
-            </td>
+            <td></td>
             <td></td>
           </tr>
-          <!--The sectionform below is for taking input from the user-->
+          <!--The sectionform below is for taking input from the user to UPDATE the record-->
           <tr>
             <td></td>     
             <td>
@@ -155,7 +122,7 @@ session_start();
 
                 <tr>
                 <td>Name:</td>
-                <td><input type="text" name="user_name" value= "<?= $_SESSION['user_name'] ?>"readonly disabled ></td>
+                <td><input type="text" name="user_name" value= "<?= $_SESSION['user_name'] ?>" readonly ></td>
               </tr>
 
                 <tr>
@@ -194,6 +161,10 @@ session_start();
     </main>
 
     <?php
+      // // code to turn error reporting on
+      // error_reporting(E_ALL);
+      // ini_set('display_errors', 1);
+
       //Declare variables to use for SESSION and writing to the DATABASE
 
 
@@ -205,26 +176,33 @@ session_start();
         $address = $_POST['user_address'];
         $email = $_POST['user_email'];
 
+        echo $name;
+        echo $email;
+        echo $address;
+
         // Check if the field is mpty then not to insert record in table
         if(!empty($name) && !empty($email) && !empty($address)) {
 
         // Open conncetion
         $conn = new mysqli($servername, $username, $password, $dbname);
+        echo "conn open";
         if ($conn->connect_error) {
           die("Connection failed: " . $conn->connect_error);
         }
         // Build SQL and execute
         // UPDATE `customers` SET `user_name`='[value-1]',`user_email`='[value-2]',`user_address`='[value-3]' WHERE 1
-
-        $stmt = $conn->prepare("UPDATE customers set user_email = $email, user_address = $address WHERE user_name = $name " );
+        
+        $stmt = $conn->prepare("UPDATE customers SET user_email = '$email', user_address = '$address' WHERE user_name = '$name'; ");
         $stmt->execute();
 
         //Close conncetion
         $stmt->close();
         $conn->close();
+      
+        header('Location:shop.php');
       }
 
-      header('Location:shop.php');
+     
 ?>
 
 

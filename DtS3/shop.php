@@ -30,17 +30,8 @@ session_start();
     <img src="image/banner.jpg" alt="onlinebusiness Banner gif" />
     </header>
 
-
     <nav>
-          <ul>
-            <li> <a href="index.php">Home</Details></a></li>
-  
-            <!-- <li><a href="shop.php">Shop</a></li>           -->
-            
-            <!-- <li><a href="items.php">Items</a></li> -->
-            <!-- <li><a href="login.php">Login</a></li>    -->
-            
-            
+          <ul>                       
             <?php
             // //These links below will appear if the user has global admin rights. 
             // //This is desidned by user_name but ideally should be used with a role defined and better to reflect this in the table 
@@ -49,13 +40,11 @@ session_start();
                 if ($user_name === "aaa") {
                   echo '<li><a href="addproduct.php">Add Product</a></li>';
                   echo '<li><a href="admin_dashboard.php">Admin Dashboard</a></li>';
-                 echo "Logged in as admin to view 2 extra links";
+                  echo "Logged in as admin to view 2 extra links";
                 }
             ?>
-           <li><a href="contact.php">Contact</a></li>
            <li><a href="update.php">Account Update</a></li>
            <li><a href="logout.php">log out</a></li>
-            
           </ul>
         </nav>
 
@@ -79,36 +68,14 @@ session_start();
           <tr>
             <td></td>
             <td>
-            </td>
-            <td></td>
-          </tr>
-          <tr>
-            <td></td>
-            
-            <td>
-         
-
           <form method="post" action="">
 
 
           <table style="text-align: left;">
-            <tr>
-              <td>Name:</td>
-              <td><input type="text" name="user_name" value= "<?= $_SESSION['user_name'] ?>" readonly disabled></td>
-            </tr>
-
-            <tr>
-              <td>Email :</td>
-              <td><input type="email" name="user_email" value= "<?= $_SESSION['user_email'] ?>" readonly disabled> </td>
-            </tr>
-            
-            <tr>
-              <td>Address:</td>
-              <td><input type="text" name="user_address" value= "<?= $_SESSION['user_address'] ?>" readonly disabled></td>
-            </tr>           
+  
             <td></td>
-          </table>
-          <br></br><br></br><br></br>
+            <!-- </table> -->
+            <br></br><br></br><br></br>
             <tr>
                 <td><img src="image/hoodie3.jpg" alt="image of hoodie3"/></td></td>
          
@@ -160,58 +127,65 @@ session_start();
             <td><img src="image/hoodie7.jpg" alt="image of hoodie7"/></td>
                 <td><img src="image/hoodie9.jpg" alt="image of hoodie9"/></td></td>
             </td>
-            
-  
-            
-            
-                </select>
-        
-
-
-              </td> 
-    
 
             <tr>
-            <td>
-            <lable for="quanity">Select Quantity:</lable>
-                <select id="quanity4" name="quanity4">
-                <option value="" disabled selected>select option</option>
-                  <option value="1">1 - $50</option>
-                  <option value="2">2 - $100</option>
-                  <option value="3">3 - $150</option>
-
-                </select>
-
-            </td>  
-            <td>
-              <lable for="quanity">Select Quantity:</lable>
-                <select id="quanity5" name="quanity5">
-                <option value="" disabled selected>select option</option>
-                  <option value="1">1 - $150</option>
-                  <option value="2">2 - $300</option>
-
-                </select>
-              </td>
               <td>
               <lable for="quanity">Select Quantity:</lable>
-                <select id="quanity6" name="quanity6">
-                <option value="" disabled selected>select option</option>
-                <option value="1">1 - $40</option>
-                  <option value="2">2 - $80</option>
-                  <option value="3">3 - $120</option>
-                </select>
-            </td>
+                  <select id="quanity4" name="quanity4">
+                  <option value="" disabled selected>select option</option>
+                    <option value="1">1 - $50</option>
+                    <option value="2">2 - $100</option>
+                    <option value="3">3 - $150</option>
 
-            <td></td>
+                  </select>
+
+              </td>  
+              <td>
+                <lable for="quanity">Select Quantity:</lable>
+                  <select id="quanity5" name="quanity5">
+                  <option value="" disabled selected>select option</option>
+                    <option value="1">1 - $150</option>
+                    <option value="2">2 - $300</option>
+
+                  </select>
+                </td>
+                <td>
+                <lable for="quanity">Select Quantity:</lable>
+                  <select id="quanity6" name="quanity6">
+                  <option value="" disabled selected>select option</option>
+                  <option value="1">1 - $40</option>
+                    <option value="2">2 - $80</option>
+                    <option value="3">3 - $120</option>
+                  </select>
+              </td>
+
+              <td></td>
+              <br><br><br>
+            </tr> 
+
+            <tr>
+              <td>Name:</td>
+              <td><input type="text" name="user_name" value= "<?= $_SESSION['user_name'] ?>" readonly disabled></td>
             </tr>
 
             <tr>
-            <td></td>
-            <td> <input type="submit" name="submit" value="Submit"> </td>
-            <td></td>
-          </form>
-          </tr>
+              <td>Email :</td>
+              <td><input type="email" name="user_email" value= "<?= $_SESSION['user_email'] ?>" readonly disabled> </td>
+            </tr>
+            
+            <tr>
+              <td>Address:</td>
+              <td><input type="text" name="user_address" value= "<?= $_SESSION['user_address'] ?>" readonly disabled></td>
+            </tr>           
 
+            <tr>
+              <td></td>
+              <td> <input type="submit" name="submit" value="Place Order"> </td>
+              <td></td>
+
+            
+            </tr>
+          </form>
           <tr>
             <td></td>
             <td>            
@@ -226,7 +200,9 @@ session_start();
   </main>
 
     <?php
-        // session_start(); // Start the session
+      // // code to turn error reporting on
+      // error_reporting(E_ALL);
+      // ini_set('display_errors', 1);
 
         // Connect to the database
         $servername = "localhost";

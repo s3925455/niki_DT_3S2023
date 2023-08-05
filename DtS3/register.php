@@ -189,9 +189,13 @@ session_start();
     </main>
 
     <?php
+
+      // // code to turn error reporting on
+      // error_reporting(E_ALL);
+      // ini_set('display_errors', 1);
+
+
       //Declare variables to use for SESSION and writing to the DATABASE
-
-
         $servername = "localhost";
         $username = "bob";
         $password = "down";
@@ -208,8 +212,7 @@ session_start();
         if ($conn->connect_error) {
           die("Connection failed: " . $conn->connect_error);
         }
-        // Build SQL and execute
-        
+        // //Build SQL and execute
 
         $stmt = $conn->prepare("INSERT INTO customers ( user_name, user_email, user_address) VALUES 
         ('$name', '$email','$address' )");
