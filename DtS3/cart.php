@@ -1,36 +1,6 @@
 <?php
 session_start();
 
-// Connect to the database
-$servername = "localhost";
-$username = "bob";
-$password = "down";
-$dbname = "onlineshop";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
-// Code to set description valu based upon POST submission
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  if (isset($_POST['prod_description_cap'])) {
-    $description = $_POST['prod_description_cap'];
-  } elseif (isset($_POST['prod_description_hoodie'])) {
-    $description = $_POST['prod_description_hoodie'];
-  } elseif (isset($_POST['prod_description_shoe'])) {
-    $description = $_POST['prod_description_shoe'];
-  } else {
-    header('Location:shop.php');
-  }
-
-  // Query to fetch products for the selected category
-  $sql = "SELECT * FROM products WHERE prod_description = '$description'";
-  $result = $conn->query($sql);
-}
-
-
 ?>
 
 
@@ -52,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <!-- Self Reloading a page -->
     <meta http-equiv="refresh" content="10000">
   <!-- Other meta tags and CSS styles here -->
-  <title>Astral Online Business Shop</title>
+  <title>Astral Online Business Shop:Cart</title>
 </head>
 
 <body>
@@ -88,44 +58,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <table>
        <tr>
           <td></td>
-          <td><h1>Order Here</h1></td>
+          <td><h1>Shopping Cart</h1></td>
           <td></td>
         </tr>
       <tr>
-        <td></td>
-        <td>
-      <?php
-    // Display products for the selected category
-    if (isset($result) && $result->num_rows > 0) {
-      while ($row = $result->fetch_assoc()) {
-        echo '<div>';
-        echo '<form method="post" action="cart.php">';
-        echo '<p>Name: ' . $row['prod_name'] . '</p>';
-        echo '<p>Description: ' . $row['prod_description'] . '</p>';
-        echo '<p>Price: $' . $row['price'] . '</p>';
-        echo '<img src="' . $row['/image/cap1.png'] . '" alt="' . $row['name'] . '" />';
-        // echo '<img src="' . $row['prod_url'] . '" alt="' . $row['name'] . '" />';
-        // echo '<form method="post" action="cart.php">';
-        echo '<input type="hidden" name="product_id" value="' . $row['id'] . '" />';
-        echo '<label for="quantity">Select Quantity:</label>';
-        echo '<select id="quantity" name="quantity">';
-        echo '<option value="" disabled selected>select option</option>';
-        echo '<option value="1">1</option>';
-        echo '<option value="2">2</option>';
-        echo '<option value="3">3</option>';
-        echo '<option value="4">4</option>';
-        echo '</select>';
-        echo '<input type="submit" name="submit" value="Add to Cart">';
-        echo '</form>';
-        echo '</div>';
-      }
-    } else {
-      echo '<p>No products found in this category.</p>';
-    }
-    ?>
-    </td>
-    <td></td>
-    </tr>
+     
+
+      </tr>
 
   </form>
   </table>

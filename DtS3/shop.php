@@ -59,35 +59,6 @@ $_POST = array();
         </nav>
 
 
-
-
-  <!-- <aside>
-    <table>
-       <tr>
-          <td></td>
-          <td><h1>Shop Here</h1></td>
-          <td></td>
-        </tr>
-      <tr>
-        
-        <td><lable for="category">Select product category:</lable>
-              <select id="category" name="category">
-              <option value="" disabled selected>select option</option>
-              <option value="cap">Caps</option>
-              <option value="hoodie">Hoodie</option>
-              <option value="shoes">Shoes</option>
-        </td>
-        <td><lable for="price">Price</lable>
-              <select id="price" name="price">
-              <option value="" disabled selected>select option</option>
-              <option value="25">0-25</option>
-              <option value="50">26-50</option>
-              <option value="100">51-100</option>
-        </td>
-        <td><input type="submit" name="submit" value="Search"> </td>
-      </tr>
-    </table>    
-  </aside> -->
   <h2>Select category below:</h2>
   <aside>
   <form id="orderForm" method="post" action="order.php">
@@ -109,6 +80,7 @@ $_POST = array();
 
 
   <script>
+    // Script to submit description value Ref: ChatGpt
     document.getElementById('capImage').addEventListener('click', function() {
       document.getElementById('orderForm').submit();
     });

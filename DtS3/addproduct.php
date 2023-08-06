@@ -17,7 +17,7 @@ session_start();
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register customer</title>
+    <title>Add product</title>
 
   </head>
 
@@ -29,77 +29,74 @@ session_start();
 
 
     <?php
+// define variables and set to empty values
+$descriptionErr = $priceErr = $nameErr = $urlErr = "";
+$name = $price = $prod_description = $prod_url = "";
 
-      // define variables and set to empty values
-      $nameErr = $addressErr = $emailErr = "";
-      $name = $address = $email = "";
-
-      //input field validation including PREG match with IF statement
-      if ($_SERVER["REQUEST_METHOD"] == "POST") {
-      if (empty($_POST["user_name"])) {
-        $nameErr = "Name is required";
-      } else {
-        $name = test_input($_POST["user_name"]);
+// input field validation including PREG match with IF statement
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (empty($_POST["prod_description"])) {
+        $descriptionErr = "Description is required";
+    } else {
+        $prod_description = test_input($_POST["prod_description"]);
         // check if name only contains letters and whitespace
-        if (!preg_match("/^[a-zA-Z0-9-' ]*$/", $name)) {
-
-       
-          $nameErr = "Only letters/numbers and white space allowed in name";
+        if (!preg_match("/^[a-zA-Z0-9-' ]*$/", $prod_description)) {
+            $descriptionErr = "Only letters, numbers, and white space allowed in description";
         }
-      }
-
-      if (empty($_POST["user_address"])) {
-        $addressErr = "Address is required";
-      } else {
-        $address = test_input($_POST["user_address"]);
-        // check if state only contains letters and whitespace
-        if (!preg_match("/[A-Za-z0-9\-\\,.]+/", $address)) {
-          // "/^[a-zA-Z-' ]*$/"
-          // /[A-Za-z0-9\-\\,.]+/
-          $addressErr = "Only letters and white space allowed in address";
-        }
-      }
-
-      if (empty($_POST["user_email"])) {
-        $emailErr = "Email is required";
-      } else {
-        $email = test_input($_POST["user_email"]);
-        // check if postcode only contains numbers
-        if (!preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/", $email)) {
-          $emailErr = "Insert email in proper format";
-        }
-      }
     }
 
+    if (empty($_POST["prod_name"])) {
+        $nameErr = "Name is required";
+    } else {
+        $name = test_input($_POST["prod_name"]);
+        // check if name only contains letters and whitespace
+        if (!preg_match("/[A-Za-z0-9\-\\,.]+/", $name)) {
+            $nameErr = "Only letters and white space allowed in name";
+        }
+    }
 
-   // The function test_input($data) is a common function used for data validation and sanitization in PHP.
-   //  It takes a data input as a parameter and performs the following actions:
-   // trim($data): This function removes any leading or trailing whitespace from the data. It ensures that there 
-   //  are no unnecessary spaces before or after the actual content.
-   // stripslashes($data): This function removes any backslashes (\) from the data. It is used to prevent the injection 
-   // of unwanted characters, particularly when dealing with data that has been submitted from HTML forms.
-   // htmlspecialchars($data): This function converts special characters to their HTML entities. It helps to prevent 
-   // cross-site scripting (XSS) attacks by encoding characters that have special meanings in HTML, such as <, >, ", ', 
-   // and &. This ensures that the data is displayed correctly in the HTML output and prevents potential security vulnerabilities.
+    if (empty($_POST["prod_url"])) {
+        $urlErr = "URL is required";
+    } else {
+        $prod_url = test_input($_POST["prod_url"]);
+        // check if URL only contains letters and whitespace
+        if (!preg_match("/[A-Za-z0-9\-\\,.]+/", $prod_url)) {
+            $urlErr = "Only letters and white space allowed in URL";
+        }
+    }
 
-      function test_input($data) {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
-      }
-    
-    ?>
+    if (empty($_POST["price"])) {
+        $priceErr = "Price is required";
+    } else {
+        $price = test_input($_POST["price"]);
+        // check if price contains only numbers
+        if (!preg_match("/^[0-9\-\\,.]+$/", $price)) {
+            $priceErr = "Only numbers allowed in price";
+        }
+    }
+}
+
+// The function test_input($data) is a common function used for data validation and sanitization in PHP.
+// It takes a data input as a parameter and performs the following actions:
+// trim($data): This function removes any leading or trailing whitespace from the data. It ensures that there
+// are no unnecessary spaces before or after the actual content.
+// stripslashes($data): This function removes any backslashes (\) from the data. It is used to prevent the injection
+// of unwanted characters, particularly when dealing with data that has been submitted from HTML forms.
+// htmlspecialchars($data): This function converts special characters to their HTML entities. It helps to prevent
+// cross-site scripting (XSS) attacks by encoding characters that have special meanings in HTML, such as <, >, ", ', and &.
+// This ensures that the data is displayed correctly in the HTML output and prevents potential security vulnerabilities.
+function test_input($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
+?>
+
   <!--This is the navigation bar on the web page -->
   <nav>
           <ul>
             <li> <a href="index.php">Home</Details></a></li>
-  
-            <!-- <li><a href="shop.php">Shop</a></li>           -->
-            
-            <!-- <li><a href="items.php">Items</a></li> -->
-            <li><a href="login.php">Login</a></li>   
-            <li><a href="register.php">Register</a></li>
             
             <?php
             // //These links below will appear if the user has global admin rights. 
@@ -111,9 +108,10 @@ session_start();
                   echo '<li><a href="admin_dashboard.php">Admin Dashboard</a></li>';
                  echo "Logged in as admin to view 2 extra links";
                 }
-            ?>
-           <li><a href="contact.php">Contact</a></li>
-            
+
+            ?>         
+              <li><a href="update.php">Account Update</a></li>
+              <li><a href="logout.php">log out</a></li>
           </ul>
         </nav>
 
@@ -125,7 +123,7 @@ session_start();
         <table class="table">
           <tr>
             <th></th>
-            <th><h2>Customer registration</h2></th>
+            <th><h2>Add product</h2></th>
             <th>
               <?php
               // Return current date from the remote server
@@ -151,19 +149,26 @@ session_start();
                 <table style="text-align: left;">
 
                 <tr>
-                  <td>Email: </td>
-                  <td> <input type="email" name="user_email"value= "">*</td>
+                  <td>Name: </td>
+                  <td> <input type="text" name="prod_name"value= "">*</td>
                 </tr>
               
               <tr>
-                <td>Name:</td>
-                <td><input type="text" name="user_name" value= "">*</td>
+                <td>Product Description:</td>
+                <td><input type="text" name="prod_description" value= "">*</td>
               </tr>
               
               <tr>
-                <td>Address:</td>
-                <td><input type="text" name="user_address" >*</td>
+                <td>Price:</td>
+                <td><input type="text" name="price" >*</td>
               </tr>
+
+              <tr>
+                <td>URL:</td>
+                <td><input type="text" name="prod_url" >*</td>
+              </tr>
+
+
               </table>
 
                 <input type="submit" name="submit" value="Submit"> 
@@ -177,9 +182,10 @@ session_start();
             <td></td>
             <!--This section displays the Errors generated from the input validation-->
             <td>  
-               <span class="error"><?php echo $emailErr ;?></span>  <br>        
-              <span class="error"><?php echo $nameErr;?></span><br>
-              <span class="error"><?php echo $addressErr ;?></span><br>
+               <span class="error"><?php echo $nameErr ;?></span>  <br>        
+              <span class="error"><?php echo $descriptionErr;?></span><br>
+              <span class="error"><?php echo $priceErr ;?></span><br>
+              <span class="error"><?php echo $urlErr ;?></span><br>
              
             </td>
             <td></td>
@@ -196,12 +202,13 @@ session_start();
         $username = "bob";
         $password = "down";
         $dbname = "onlineshop";
-        $name = $_POST['user_name'];
-        $address = $_POST['user_address'];
-        $email = $_POST['user_email'];
+        $name = $_POST['prod_name'];
+        $prod_description = $_POST['prod_description'];
+        $price = $_POST['price'];
+        $prod_url = $_POST['prod_url'];
 
         // Check if the field is mpty then not to insert record in table
-        if(!empty($name) && !empty($email) && !empty($email)) {
+        if(!empty($name) && !empty($prod_description) && !empty($price) && !empty($prod_url)) {
 
         // Open conncetion
         $conn = new mysqli($servername, $username, $password, $dbname);
@@ -211,8 +218,8 @@ session_start();
         // Build SQL and execute
         
 
-        $stmt = $conn->prepare("INSERT INTO customers ( user_name, user_email, user_address) VALUES 
-        ('$name', '$email','$address' )");
+        $stmt = $conn->prepare("INSERT INTO products ( prod_name, prod_description, price, prod_url) VALUES 
+        ('$name', '$prod_description','$price' , '$prod_url' )");
         $stmt->execute();
 
         //Close conncetion
