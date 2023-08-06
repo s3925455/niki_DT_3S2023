@@ -105,12 +105,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       while ($row = $result->fetch_assoc()) {
         echo '<div class="card_order">';
         echo '<form method="post" action="cart.php">';
-        // echo '<img src="' . $row['image/cap4.png'] . '" alt="' . $row['prod_name'] . '" />';
         echo '<img src="' . $row['prod_url'] . '" alt="' . $row['prod_name'] . '" width="300" height="300"  />';
         echo '<p>Name: ' . $row['prod_name'] . '</p>';
         echo '<p>Description: ' . $row['prod_description'] . '</p>';
         echo '<p>Price: $' . $row['price'] . '</p>';
-        // echo '<form method="post" action="cart.php">';
         echo '<input type="hidden" name="product_id" value="' . $row['id'] . '" />';
         echo '<label for="quantity">Select Quantity:</label>';
         echo '<select id="quantity" name="quantity">';
@@ -184,56 +182,4 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
