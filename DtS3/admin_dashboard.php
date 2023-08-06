@@ -56,70 +56,70 @@ session_start();
 
      <!--This is the main section of the web page where most of the information is provided-->
     
-    <main>
-    
+     <main>
     <table class="table">
-          <tr>
+        <tr>
             <th></th>
-            <th><h2>Admin Dashboard- Reports</h2><hr><h3>All Orders- List</h3></th>
             <th>
-              <?php
-              // Return current date from the remote server
-              $date = date('d-m-y');
-              echo "Date: ";
-              echo $date;
-              ?>
-          </th>
-          </tr>
-          <tr>
+                <h2>Admin Dashboard- Reports</h2>
+                <hr>
+                <h3>All Orders- List</h3>
+            </th>
+            <th>
+                <?php
+                // Return current date from the remote server
+                $date = date('d-m-y');
+                echo "Date: ";
+                echo $date;
+                ?>
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <?php
+                $dbtablename = "onlineshop";
+                $dbuserid = $_SESSION['user_id'];
+                // echo $dbuserid;
+                // echo $dbtablename;
+                //Step1
+                $db = mysqli_connect('localhost', 'bob', 'down', 'onlineshop')
+                or die('Error connecting to MySQL server.');
 
-          </tr>
+                $sortColumn = isset($_GET['sort']) ? $_GET['sort'] : 'customer_name';
+                $sortOrder = isset($_GET['order']) ? $_GET['order'] : 'asc';
 
-          <tr><td></td>
-        
-        <td>
-        <?php
-      $dbtablename = "onlineshop";
-      $dbuserid = $_SESSION['user_id'];  
-      // echo $dbuserid;
-      // echo  $dbtablename;
-      //Step1
-      $db = mysqli_connect('localhost','bob','down','onlineshop')
-      or die('Error connecting to MySQL server.');
-      ?>
-      
-      <!-- <h2>PHP connect to MySQL</h2> -->
+                //Step2
+                $query = "SELECT * FROM invoice_items ORDER BY $sortColumn $sortOrder";
+                $result = mysqli_query($db, $query) or die('Error querying database.');
 
-      <?php
-      //Step2
-      $query = "SELECT * FROM invoice_items";
-      mysqli_query($db, $query) or die('Error querying database.');
-      //Step3
-      $result = mysqli_query($db, $query);
-      //$row = mysqli_fetch_array($result);
+                echo "<table border='1' width='100%'>
+                    <tr>
+                        <th><a href='?sort=customer_name&order=" . ($sortColumn === 'customer_name' && $sortOrder === 'asc' ? 'desc' : 'asc') . "'>Customer name</a></th>
+                        <th><a href='?sort=invoice_id&order=" . ($sortColumn === 'invoice_id' && $sortOrder === 'asc' ? 'desc' : 'asc') . "'>Invoice Id</a></th>
+                        <th><a href='?sort=product_name&order=" . ($sortColumn === 'product_name' && $sortOrder === 'asc' ? 'desc' : 'asc') . "'>Product Name</a></th>
+                        <th><a href='?sort=quantity&order=" . ($sortColumn === 'quantity' && $sortOrder === 'asc' ? 'desc' : 'asc') . "'>Quantity</a></th>
+                    </tr>";
 
+                while ($row = mysqli_fetch_array($result)) {
+                    echo "<tr>
+                        <td>" . $row['customer_name'] . "</td>
+                        <td>" . $row['invoice_id'] . "</td>
+                        <td>" . $row['product_name'] . "</td>
+                        <td>" . $row['quantity'] . "</td>
+                    </tr>";
+                }
 
+                echo "</table>";
 
-      while ($row = mysqli_fetch_array($result)) {
+                //Step 4
+                mysqli_close($db);
+                ?>
+            </td>
+        </tr>
+    </table>
+</main>
 
-
-      echo "<table border='1' width='100%'>
-     
-      <tr><th>Customer name</th><th>Invoice Id</th><th>Product Name</th><th>Quantity</th></tr>
-      <tr><td>".$row['customer_name']."</td><td>".$row['invoice_id']."</td><td>".$row['product_name']."</td><td>".$row['quantity']."</td></tr>
-
-      </table>";
-
-      } 
-      //Step 4
-      mysqli_close($db);
-    ?>
-
-    </td>
-    </tr>
-    </table>       
- 
-    </main>
 
     <aside id="debug">
       <hr>
