@@ -63,6 +63,15 @@ $_POST = array();
   <aside>
   <form id="orderForm" method="post" action="order.php">
     <table style="text-align: left;">
+
+    <tr><td></td><td></td><td>    <?php
+              // Return current date from the remote server
+              $date = date('d-m-y');
+              echo "Date: ";
+              echo $date;
+              ?></td>
+
+    </tr>
    
       <tr>
 

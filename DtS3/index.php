@@ -75,12 +75,9 @@ session_start();
               echo "Date: ";
               echo $date;
 
-
               $user_id = $_SESSION['user_id'];
               $user_first = $_SESSION['user_first'];
               $user_last = $_SESSION['user_last'];
-
-
 
               ?>
             </th>

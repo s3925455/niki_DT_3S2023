@@ -110,7 +110,12 @@ session_start();
           <tr>
             <td></td>
             <td></td>
-            <td></td>
+            <td>    <?php
+              // Return current date from the remote server
+              $date = date('d-m-y');
+              echo "Date: ";
+              echo $date;
+              ?></td>
           </tr>
           <!--The sectionform below is for taking input from the user to UPDATE the record-->
           <tr>

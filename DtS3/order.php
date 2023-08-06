@@ -56,8 +56,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 
 <body>
-  <!--This is the header/ banner section of the web page-->
-  <header>
+  <!--This is the header/ banner section of the web page. ID 'toppage' so that the floating button reacts to scroll web page to top of page-->
+  <header id="toppage">
     <img src="image/banner.jpg" alt="onlinebusiness Banner gif" />
   </header>
 
@@ -89,7 +89,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
        <tr>
           <td></td>
           <td><h1>Order Here</h1></td>
-          <td></td>
+          <td>    <?php
+              // Return current date from the remote server
+              $date = date('d-m-y');
+              echo "Date: ";
+              echo $date;
+              ?></td>
         </tr>
       <tr>
         <td></td>
@@ -98,13 +103,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Display products for the selected category
     if (isset($result) && $result->num_rows > 0) {
       while ($row = $result->fetch_assoc()) {
-        echo '<div>';
+        echo '<div class="card_order">';
         echo '<form method="post" action="cart.php">';
+        // echo '<img src="' . $row['image/cap4.png'] . '" alt="' . $row['prod_name'] . '" />';
+        echo '<img src="' . $row['prod_url'] . '" alt="' . $row['prod_name'] . '" width="300" height="300"  />';
         echo '<p>Name: ' . $row['prod_name'] . '</p>';
         echo '<p>Description: ' . $row['prod_description'] . '</p>';
         echo '<p>Price: $' . $row['price'] . '</p>';
-        echo '<img src="' . $row['/image/cap1.png'] . '" alt="' . $row['name'] . '" />';
-        // echo '<img src="' . $row['prod_url'] . '" alt="' . $row['name'] . '" />';
         // echo '<form method="post" action="cart.php">';
         echo '<input type="hidden" name="product_id" value="' . $row['id'] . '" />';
         echo '<label for="quantity">Select Quantity:</label>';
@@ -116,8 +121,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         echo '<option value="4">4</option>';
         echo '</select>';
         echo '<input type="submit" name="submit" value="Add to Cart">';
+        echo '<br>';
         echo '</form>';
         echo '</div>';
+        echo '<br><br>';
       }
     } else {
       echo '<p>No products found in this category.</p>';
@@ -132,7 +139,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   </aside>
 
 
+      <!-- Floating buttons -->
+      <div>
+        <a href="#toppage">
+          <div class="floating-button1">Top</div>
+        </a>
+      </div>
 
+      <!-- <div>
+        <a href="#midpage">
+          <div class="floating-button2">Mid</div>
+        </a>
+      </div> -->
+
+      <div>
+        <a href="#bottompage">
+          <div class="floating-button3">End</div>
+        </a>
+      </div>
 
 
 
@@ -140,7 +164,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
   <aside id="debug">
       <hr>
-      <h3>Debug Area</h3>
+      <!-- ID for h3 is 'bottompage' so that floating button can reach to bottom of page. -->
+      <h3 id="bottompage">Debug Area</h3>
       <pre>
         GET Contains:
         <?php print_r($_GET) ?>
