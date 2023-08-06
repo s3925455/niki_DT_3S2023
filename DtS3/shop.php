@@ -2,6 +2,15 @@
 // Start the session
 session_start();
 
+
+// // Clear product description variable 
+// unset($_POST['prod_description']);
+
+// Clear entire post
+$_POST = array();
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -52,7 +61,7 @@ session_start();
 
 
 
-  <aside>
+  <!-- <aside>
     <table>
        <tr>
           <td></td>
@@ -77,35 +86,25 @@ session_start();
         </td>
         <td><input type="submit" name="submit" value="Search"> </td>
       </tr>
-    </table>
-    
-  </aside>
-
+    </table>    
+  </aside> -->
+  <h2>Select category below:</h2>
   <aside>
   <form id="orderForm" method="post" action="order.php">
     <table style="text-align: left;">
+   
       <tr>
 
-          <td><img id="capImage" src="image/cap1.png" alt="click image of cap" width="400" height="400" /><input type="hidden" name="prod_description" value="cap" /></td>
+          <td><img id="capImage" src="image/cap1.png" alt="click image of cap" width="400" height="400" /><input type="hidden" name="prod_description_cap" value="cap" /></td>
 
-          <td><img id="hoodieImage" src="image/hoodie5.jpg" alt="click image of hoodie" width="400" height="400" /><input type="hidden" name="prod_description" value="hoodie" /></td>
+          <td><img id="hoodieImage" src="image/hoodie5.jpg" alt="click image of hoodie" width="400" height="400" /><input type="hidden" name="prod_description_hoodie" value="hoodie" /></td>
 
-
-          <!-- <td><img src="image/hoodie5.jpg" alt="click image of hoodie" width="400" height="400" /></td> -->
-
-          <td><img src="image/shoe1.png" alt="click image of shoe" width="400" height="400" /></td>
-
-
+          <td><img id="shoeImage" src="image/shoe1.png" alt="click image of shoe" width="400" height="400" /><input type="hidden" name="prod_description_shoe" value="shoe" /></td>
 
       </tr>
      </table>
   </form>
   </aside>
-
-
-
-
-
 
 
 
@@ -118,6 +117,9 @@ session_start();
       document.getElementById('orderForm').submit();
     });
     
+    document.getElementById('shoeImage').addEventListener('click', function() {
+      document.getElementById('orderForm').submit();
+    });
     
   </script>
 

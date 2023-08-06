@@ -14,8 +14,16 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-if (isset($_POST['prod_description'])) {
-  $description = $_POST['prod_description'];
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+  if (isset($_POST['prod_description_cap'])) {
+    $description = $_POST['prod_description_cap'];
+  } elseif (isset($_POST['prod_description_hoodie'])) {
+    $description = $_POST['prod_description_hoodie'];
+  } elseif (isset($_POST['prod_description_shoe'])) {
+    $description = $_POST['prod_description_shoe'];
+  } else {
+    header('Location:shop.php');
+  }
 
   // Query to fetch products for the selected category
   $sql = "SELECT * FROM products WHERE prod_description = '$description'";
@@ -92,7 +100,8 @@ if (isset($_POST['prod_description'])) {
         echo '<p>Name: ' . $row['name'] . '</p>';
         echo '<p>Description: ' . $row['prod_description'] . '</p>';
         echo '<p>Price: $' . $row['price'] . '</p>';
-        echo '<img src="' . $row['image_url'] . '" alt="' . $row['name'] . '" />';
+        echo '<img src="' . $row['/image/cap1.png'] . '" alt="' . $row['name'] . '" />';
+        // echo '<img src="' . $row['prod_url'] . '" alt="' . $row['name'] . '" />';
         echo '<form method="post" action="cart.php">';
         echo '<input type="hidden" name="product_id" value="' . $row['id'] . '" />';
         echo '<label for="quantity">Select Quantity:</label>';
