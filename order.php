@@ -15,13 +15,14 @@ if ($conn->connect_error) {
 }
 // Code to set description valu based upon POST submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  if (isset($_POST['prod_description_cap'])) {
-    $description = $_POST['prod_description_cap'];
-  } elseif (isset($_POST['prod_description_hoodie'])) {
-    $description = $_POST['prod_description_hoodie'];
-  } elseif (isset($_POST['prod_description_shoe'])) {
-    $description = $_POST['prod_description_shoe'];
-  } else {
+  if (isset($_POST['prod_description'])) {
+    $description = $_POST['prod_description'];
+  // } elseif (isset($_POST['prod_description_hoodie'])) {
+  //   $description = $_POST['prod_description_hoodie'];
+  // } elseif (isset($_POST['prod_description_shoe'])) {
+  //   $description = $_POST['prod_description_shoe'];
+  }
+   else {
     header('Location:shop.php');
   }
 

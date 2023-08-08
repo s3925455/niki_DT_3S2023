@@ -63,46 +63,58 @@ $_POST = array();
   <aside>
   <form id="orderForm" method="post" action="order.php">
     <table style="text-align: left;">
-
-    <tr><td></td><td></td><td>    <?php
-              // Return current date from the remote server
-              $date = date('d-m-y');
-              echo "Date: ";
-              echo $date;
-              ?></td>
-
-    </tr>
-   
       <tr>
-
-          <td><img id="capImage" src="image/cap1.png" alt="click image of cap" width="400" height="400" /><input type="hidden" name="prod_description_cap" value="cap" /></td>
-
-          <td><img id="hoodieImage" src="image/hoodie5.jpg" alt="click image of hoodie" width="400" height="400" /><input type="hidden" name="prod_description_hoodie" value="hoodie" /></td>
-
-          <td><img id="shoeImage" src="image/shoe1.png" alt="click image of shoe" width="400" height="400" /><input type="hidden" name="prod_description_shoe" value="shoe" /></td>
-
+        <td></td>
+        <td></td>
+        <td>
+          <?php
+            // Return current date from the remote server
+            $date = date('d-m-y');
+            echo "Date: ";
+            echo $date;
+          ?>
+        </td>
       </tr>
-     </table>
+      <tr>
+        <td>
+          <a href="#" onclick="submitForm('cap'); return false;">
+            <img src="image/cap1.png" alt="click image of cap" width="400" height="400" />
+          </a>
+          <input type="hidden" name="prod_description" value="cap" />
+        </td>
+        <td>
+          <a href="#" onclick="submitForm('hoodie'); return false;">
+            <img src="image/hoodie5.jpg" alt="click image of hoodie" width="400" height="400" />
+          </a>
+          <input type="hidden" name="prod_description" value="hoodie" />
+        </td>
+        <td>
+          <a href="#" onclick="submitForm('shoe'); return false;">
+            <img src="image/shoe1.png" alt="click image of shoe" width="400" height="400" />
+          </a>
+          <input type="hidden" name="prod_description" value="shoe" />
+        </td>
+      </tr>
+    </table>
   </form>
-  </aside>
+</aside>
+
+<script>
+  function submitForm(description) {
+    var input = document.createElement('input');
+    input.setAttribute('type', 'hidden');
+    input.setAttribute('name', 'prod_description');
+    input.setAttribute('value', description);
+    document.getElementById('orderForm').appendChild(input);
+    document.getElementById('orderForm').submit();
+  }
+</script>
 
 
 
-  <script>
-    // Script to submit description value Ref: ChatGpt
-    document.getElementById('capImage').addEventListener('click', function() {
-      document.getElementById('orderForm').submit();
-    });
 
-    document.getElementById('hoodieImage').addEventListener('click', function() {
-      document.getElementById('orderForm').submit();
-    });
-    
-    document.getElementById('shoeImage').addEventListener('click', function() {
-      document.getElementById('orderForm').submit();
-    });
-    
-  </script>
+
+
 
 </body>
 
