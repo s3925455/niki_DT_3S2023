@@ -17,10 +17,6 @@ if ($conn->connect_error) {
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   if (isset($_POST['prod_description'])) {
     $description = $_POST['prod_description'];
-  // } elseif (isset($_POST['prod_description_hoodie'])) {
-  //   $description = $_POST['prod_description_hoodie'];
-  // } elseif (isset($_POST['prod_description_shoe'])) {
-  //   $description = $_POST['prod_description_shoe'];
   }
    else {
     header('Location:shop.php');
@@ -108,9 +104,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         echo '<form method="post" action="cart.php">';
         echo '<img src="' . $row['prod_url'] . '" alt="' . $row['prod_name'] . '" width="300" height="300"  />';
         echo '<p>Name: ' . $row['prod_name'] . '</p>';
+        echo '<input type="hidden" name="prod_name" value="' . $row['prod_name'] . '" />';
         echo '<p>Description: ' . $row['prod_description'] . '</p>';
+        echo '<input type="hidden" name="product_desription" value="' . $row['prod_description'] . '" />';
         echo '<p>Price: $' . $row['price'] . '</p>';
-        echo '<input type="hidden" name="product_id" value="' . $row['id'] . '" />';
+        echo '<input type="hidden" name="price" value="' . $row['price'] . '" />';
+
         echo '<label for="quantity">Select Quantity:</label>';
         echo '<select id="quantity" name="quantity">';
         echo '<option value="" disabled selected>select option</option>';
