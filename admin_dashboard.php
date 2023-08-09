@@ -1,37 +1,57 @@
 <?php
 // Start the session
 session_start();
+
+// Connect to the database
+$db = mysqli_connect('localhost', 'bob', 'down', 'onlineshop')
+    or die('Error connecting to MySQL server.');
+
+// Initialize variables
+$errorMessage = "";
+$deleteMessage = "";
+
+// **** DELETE******* Handle record deletion
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete"])) {
+    $invoiceIdToDelete = $_POST["delete"];
+    $deleteQuery = "DELETE FROM `invoice_items` WHERE `invoice_id` = '$invoiceIdToDelete'";
+    if (mysqli_query($db, $deleteQuery)) {
+        $deleteMessage = "Record with Invoice ID $invoiceIdToDelete has been deleted.";
+    } else {
+        $errorMessage = "Error deleting record: " . mysqli_error($db);
+    }
+}
+
+//  Query to retrieve records
+$sortColumn = isset($_GET['sort']) ? $_GET['sort'] : 'customer_name';
+$sortOrder = isset($_GET['order']) ? $_GET['order'] : 'asc';
+
+$query = "SELECT A.customer_name, A.invoice_id, A.product_name, A.quantity, B.user_email, B.user_address 
+          FROM `invoice_items` AS A JOIN `customers` AS B ON A.customer_name = B.user_name
+          ORDER BY $sortColumn $sortOrder";
+$result = mysqli_query($db, $query) or die('Error querying database.');
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<style>
-.error {color: #FF0000;}
-</style>
-  <head>
-    <!--***************************************************************-->
-    <!--Developer Nikita Munjal of  Narrabundah Home page Website 2023 -->
-    <!--***************************************************************-->
-    <!-- <link rel="stylesheet" href="css/style1.css">-->
+<head>
     <link rel="stylesheet" href="css/style2.css" />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard</title>
-        <!-- Self Reloading a page -->
-        <meta http-equiv="refresh" content="600">
-  </head>
+    <!-- Self Reloading a page -->
+    <meta http-equiv="refresh" content="6000">
 
-
-  
-
-  <body>
+</head>
+<body>
+    <!-- Header section -->
     <!--This is the header/ banner section of the web page-->
     <header>
-    <img src="image/banner.jpg" alt="onlinebusiness Banner gif" />
+      <img src="image/banner.jpg" alt="onlinebusiness Banner gif" />
     </header>
 
 
+    <!-- Navigation section -->
     <nav>
           <ul>
             <li> <a href="index.php">Home</Details></a></li>
@@ -54,104 +74,61 @@ session_start();
         </nav>
 
 
-     <!--This is the main section of the web page where most of the information is provided-->
-    
-     <main>
-    <table class="table">
-        <tr>
-            <th></th>
-            <th>
-                <h2>Admin Dashboard- Reports</h2>
-                <hr>
-                <h3>All Orders- List</h3>
-            </th>
-            <th>
-                <?php
-                // Return current date from the remote server
-                $date = date('d-m-y');
-                echo "Date: ";
-                echo $date;
-                ?>
-            </th>
-        </tr>
-              </table>
-        <table>
-        <tr>
-          
-            <td>
-                <?php
-                $dbtablename = "onlineshop";
-                $dbuserid = $_SESSION['user_id'];
-                // echo $dbuserid;
-                // echo $dbtablename;
-                //Step1
-                $db = mysqli_connect('localhost', 'bob', 'down', 'onlineshop')
-                or die('Error connecting to MySQL server.');
+    <!-- Main content section -->
+    <main>
+        <h2>Admin Dashboard - Reports</h2>
+        <hr>
+        <h3>All Orders - List</h3>
 
-                $sortColumn = isset($_GET['sort']) ? $_GET['sort'] : 'customer_name';
-                $sortOrder = isset($_GET['order']) ? $_GET['order'] : 'asc';
+        <!-- Display delete message if any -->
+        <p class="error"><?php echo $deleteMessage; ?></p>
+        <p class="error"><?php echo $errorMessage; ?></p>
 
-                //// **********This is COMPLEX Query using JOIN to get information from 2 tables and presented as one data.*******
-
-                $query = "SELECT A.customer_name, A.invoice_id, A.product_name, A.quantity, B.user_email, B.user_address 
-                FROM `invoice_items` AS A JOIN `customers` AS B ON A.customer_name = B.user_name
-                ORDER BY $sortColumn $sortOrder";
-                $result = mysqli_query($db, $query) or die('Error querying database.');
-
-                echo "<table border='1' width='100%'>
-                    <tr>
-                        <th><a href='?sort=customer_name&order=" . ($sortColumn === 'customer_name' && $sortOrder === 'asc' ? 'desc' : 'asc') . "'>Customer name</a></th>
-                        <th><a href='?sort=invoice_id&order=" . ($sortColumn === 'invoice_id' && $sortOrder === 'asc' ? 'desc' : 'asc') . "'>Invoice Id</a></th>
-                        <th><a href='?sort=product_name&order=" . ($sortColumn === 'product_name' && $sortOrder === 'asc' ? 'desc' : 'asc') . "'>Product Name</a></th>
-                        <th><a href='?sort=quantity&order=" . ($sortColumn === 'quantity' && $sortOrder === 'asc' ? 'desc' : 'asc') . "'>Quantity</a></th>
-                        <th><a href='?sort=quantity&order=" . ($sortColumn === 'user_email' && $sortOrder === 'asc' ? 'desc' : 'asc') . "'>Email</a></th>
-                        <th><a href='?sort=quantity&order=" . ($sortColumn === 'user_address' && $sortOrder === 'asc' ? 'desc' : 'asc') . "'>Address</a></th>
-                    </tr>";
-
-                while ($row = mysqli_fetch_array($result)) {
-                    echo "<tr>
+        <table border="1">
+            <tr>
+                <th><a href="?sort=customer_name&order=<?php echo ($sortColumn === 'customer_name' && $sortOrder === 'asc') ? 'desc' : 'asc'; ?>">Customer Name</a></th>
+                <th><a href="?sort=invoice_id&order=<?php echo ($sortColumn === 'invoice_id' && $sortOrder === 'asc') ? 'desc' : 'asc'; ?>">Invoice ID</a></th>
+                <th><a href="?sort=product_name&order=<?php echo ($sortColumn === 'product_name' && $sortOrder === 'asc') ? 'desc' : 'asc'; ?>">Product Name</a></th>
+                <th><a href="?sort=quantity&order=<?php echo ($sortColumn === 'quantity' && $sortOrder === 'asc') ? 'desc' : 'asc'; ?>">Quantity</a></th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Action</th>
+            </tr>
+            <?php
+            while ($row = mysqli_fetch_array($result)) {
+                echo "<tr>
                         <td>" . $row['customer_name'] . "</td>
                         <td>" . $row['invoice_id'] . "</td>
                         <td>" . $row['product_name'] . "</td>
                         <td>" . $row['quantity'] . "</td>
                         <td>" . $row['user_email'] . "</td>
                         <td>" . $row['user_address'] . "</td>
+                        <td>
+                            <form method='post'>
+                                <button type='submit' name='delete' value='" . $row['invoice_id'] . "'>Delete</button>
+                            </form>
+                        </td>
                     </tr>";
-                }
+            }
+            ?>
+        </table>
+    </main>
 
-                echo "</table>";
-
-                //Step 4
-                mysqli_close($db);
-                ?>
-            </td>
-          
-        </tr>
-    </table>
-</main>
-
-<!-- The below is a Debug area thaat shows the GET/ POST and SESSION items:  -->
-<hr>
+    <!-- Debug area -->
+    <hr>
     <aside id="debug">
-      <hr>
-      <h3>Debug Area</h3>
-      <pre>
-        GET Contains:
-        <?php print_r($_GET) ?>
-        POST Contains:
-        <?php print_r($_POST) ?>
-        SESSION Contains:
-        <?php print_r($_SESSION) ?>
-        <?php clearButton(); ?>
-      </pre>
-      <hr>
-      <h3>Code Area</h3>
-        <?php //debugModule() ?>
-        <?php printMyCode() ?>
+        <hr>
+        <h3>Debug Area</h3>
+        <pre>
+            GET Contains:
+            <?php print_r($_GET); ?>
+            POST Contains:
+            <?php print_r($_POST); ?>
+            SESSION Contains:
+            <?php print_r($_SESSION); ?>
+        </pre>
     </aside>
 
-    
-
-  </body>
+    <!-- Footer section -->
+</body>
 </html>
-
