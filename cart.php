@@ -17,51 +17,41 @@ $product_description = $_SESSION['product_description'];
 $price = $_SESSION['price'];
 $total_price = $price * $quantity;
 
-// Connect to the database
-$servername = "localhost";
-$username = "bob";
-$password = "down";
-$dbname = "onlineshop";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+  // Connect to the database
+  $servername = "localhost";
+  $username = "bob";
+  $password = "down";
+  $dbname = "onlineshop";
+  $product_name = $_POST['prod_name'];
+  $quantity = $_POST['quantity'];
+  $product_description = $_POST['product_description'];
+  $price = $_POST['price'];
+  $total_price = $price * $quantity;
 
-// Check connection
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
+  if(!empty($product_name) && !empty($quantity) && !empty( $product_name) ) {
 
-// Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  if (isset($_POST['prod_name']) && isset($_POST['quantity'])) {
-    $product_name = $_POST['prod_name'];
-    $quantity = $_POST['quantity'];
-    // $product_description = $_POST['product_description'];
-    // $price = $_POST['price'];
-    // $total_price = $price * $quantity;
-
-    // Validate the inputs (you can add more validation if needed)
-    if (empty($product_name) || empty($quantity)) {
-      echo "Product Name and quantity are required.";
-    } else {
-
-      // // Check if the product exists
-      // if ($result->num_rows > 0) {
-      //   $product = $result->fetch_assoc();
-        // Insert the cart item into the database
-        $stmt = $conn->prepare("INSERT INTO invoice_items (customer_name, product_name, quantity) VALUES (?, ?, ?)");
-        $stmt->bind_param("ssi", $customerName, $product_name, $quantity);
-        $stmt->execute();
-
-        // Redirect back to shop.php
-        header('Location: shop.php');
-        exit;
-      } 
-      // else {
-      //   echo "Product not found.";
-      // }
+    // Open conncetion
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    if ($conn->connect_error) {
+      die("Connection failed: " . $conn->connect_error);
     }
+    // //Build SQL and execute
+
+    $stmt = $conn->prepare("INSERT INTO invoice_items (customer_name, product_name, quantity) VALUES 
+    ('$customerName', '$product_name,','$quantity' )");
+    $stmt->execute();
+
+    //Close conncetion
+    $stmt->close();
+    $conn->close();
+
+    //Once completed go to shop.php web page
+    header('Location:shop.php');
   }
-// }
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -158,12 +148,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <?php print_r($_POST) ?>
         SESSION Contains:
         <?php print_r($_SESSION) ?>
-        <?php clearButton(); ?>
       </pre>
       <hr>
-      <h3>Code Area</h3>
-        <?php debugModule() ?>
-        <?php printMyCode() ?>
   </aside>
 </body>
 
