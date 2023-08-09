@@ -74,10 +74,8 @@ session_start();
                 ?>
             </th>
         </tr>
-              </table>
-        <table>
         <tr>
-          
+            <td></td>
             <td>
                 <?php
                 $dbtablename = "onlineshop";
@@ -91,11 +89,8 @@ session_start();
                 $sortColumn = isset($_GET['sort']) ? $_GET['sort'] : 'customer_name';
                 $sortOrder = isset($_GET['order']) ? $_GET['order'] : 'asc';
 
-                //// **********This is COMPLEX Query using JOIN to get information from 2 tables and presented as one data.*******
-
-                $query = "SELECT A.customer_name, A.invoice_id, A.product_name, A.quantity, B.user_email, B.user_address 
-                FROM `invoice_items` AS A JOIN `customers` AS B ON A.customer_name = B.user_name
-                ORDER BY $sortColumn $sortOrder";
+                //Step2
+                $query = "SELECT * FROM invoice_items ORDER BY $sortColumn $sortOrder";
                 $result = mysqli_query($db, $query) or die('Error querying database.');
 
                 echo "<table border='1' width='100%'>
@@ -104,8 +99,6 @@ session_start();
                         <th><a href='?sort=invoice_id&order=" . ($sortColumn === 'invoice_id' && $sortOrder === 'asc' ? 'desc' : 'asc') . "'>Invoice Id</a></th>
                         <th><a href='?sort=product_name&order=" . ($sortColumn === 'product_name' && $sortOrder === 'asc' ? 'desc' : 'asc') . "'>Product Name</a></th>
                         <th><a href='?sort=quantity&order=" . ($sortColumn === 'quantity' && $sortOrder === 'asc' ? 'desc' : 'asc') . "'>Quantity</a></th>
-                        <th><a href='?sort=quantity&order=" . ($sortColumn === 'user_email' && $sortOrder === 'asc' ? 'desc' : 'asc') . "'>Email</a></th>
-                        <th><a href='?sort=quantity&order=" . ($sortColumn === 'user_address' && $sortOrder === 'asc' ? 'desc' : 'asc') . "'>Address</a></th>
                     </tr>";
 
                 while ($row = mysqli_fetch_array($result)) {
@@ -114,8 +107,6 @@ session_start();
                         <td>" . $row['invoice_id'] . "</td>
                         <td>" . $row['product_name'] . "</td>
                         <td>" . $row['quantity'] . "</td>
-                        <td>" . $row['user_email'] . "</td>
-                        <td>" . $row['user_address'] . "</td>
                     </tr>";
                 }
 
@@ -125,13 +116,11 @@ session_start();
                 mysqli_close($db);
                 ?>
             </td>
-          
         </tr>
     </table>
 </main>
 
-<!-- The below is a Debug area thaat shows the GET/ POST and SESSION items:  -->
-<hr>
+
     <aside id="debug">
       <hr>
       <h3>Debug Area</h3>

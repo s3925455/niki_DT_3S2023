@@ -1,18 +1,18 @@
 <?php
 session_start();
 
-// Connect to the database
-$servername = "localhost";
-$username = "bob";
-$password = "down";
-$dbname = "onlineshop";
+// // Connect to the database
+// $servername = "localhost";
+// $username = "bob";
+// $password = "down";
+// $dbname = "onlineshop";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+// $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+// // Check connection
+// if ($conn->connect_error) {
+//     die("Connection failed: " . $conn->connect_error);
+// }
 
 // Assuming you have collected customer details in the session
 $customerName = $_SESSION['user_name'];
@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <p><strong>Customer Address:</strong> <?php echo $customerAddress; ?></p>
 
     <h2>Product Details:</h2>
-    <table border="1" style="width:100%">
+    <table border="1" style="width:80%">
         <tr>
             <th>Product Name</th>
             <th>Description</th>
@@ -66,6 +66,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <td>$<?php echo $totalPrice; ?></td>
         </tr>
     </table>
+
+    <form method="post" action="insert_invoice_item.php">
+      <input type="hidden" name="customer_name" value="<?php echo $customerName; ?>">
+      <input type="hidden" name="product_name" value="<?php echo $productName; ?>">
+      <input type="hidden" name="quantity" value="<?php echo $quantity; ?>">
+      <input type="submit" name="submit" value="Add to Invoice and Continue Shopping">
+    </form>
 
     <p><a href="shop.php">Continue Shopping</a></p>
 
