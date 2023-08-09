@@ -35,18 +35,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   if (isset($_POST['prod_name']) && isset($_POST['quantity'])) {
     $product_name = $_POST['prod_name'];
     $quantity = $_POST['quantity'];
-    $product_description = $_POST['product_description'];
-    $price = $_POST['price'];
-    $total_price = $price * $quantity;
+    // $product_description = $_POST['product_description'];
+    // $price = $_POST['price'];
+    // $total_price = $price * $quantity;
 
     // Validate the inputs (you can add more validation if needed)
     if (empty($product_name) || empty($quantity)) {
       echo "Product Name and quantity are required.";
     } else {
 
-      // Check if the product exists
-      if ($result->num_rows > 0) {
-        $product = $result->fetch_assoc();
+      // // Check if the product exists
+      // if ($result->num_rows > 0) {
+      //   $product = $result->fetch_assoc();
         // Insert the cart item into the database
         $stmt = $conn->prepare("INSERT INTO invoice_items (customer_name, product_name, quantity) VALUES (?, ?, ?)");
         $stmt->bind_param("ssi", $customerName, $product_name, $quantity);
@@ -55,12 +55,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // Redirect back to shop.php
         header('Location: shop.php');
         exit;
-      } else {
-        echo "Product not found.";
-      }
+      } 
+      // else {
+      //   echo "Product not found.";
+      // }
     }
   }
-}
+// }
 ?>
 
 <!DOCTYPE html>
