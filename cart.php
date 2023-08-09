@@ -1,35 +1,65 @@
 <?php
 session_start();
 
-// // Connect to the database
-// $servername = "localhost";
-// $username = "bob";
-// $password = "down";
-// $dbname = "onlineshop";
-
-// $conn = new mysqli($servername, $username, $password, $dbname);
-
-// // Check connection
-// if ($conn->connect_error) {
-//     die("Connection failed: " . $conn->connect_error);
-// }
+// Check if the user is logged in, if not redirect to login page
+if (!isset($_SESSION['user_name'])) {
+  header('Location: login.php');
+  exit;
+}
 
 // Assuming you have collected customer details in the session
 $customerName = $_SESSION['user_name'];
 $customerEmail = $_SESSION['user_email'];
 $customerAddress = $_SESSION['user_address'];
+$product_name = $_POST['prod_name'];
+$quantity = $_SESSION['quantity'];
+$product_description = $_SESSION['product_description'];
+$price = $_SESSION['price'];
+$total_price = $price * $quantity;
 
-// Code to retrieve product details based on POST submission
+// Connect to the database
+$servername = "localhost";
+$username = "bob";
+$password = "down";
+$dbname = "onlineshop";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+
+// Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (isset($_POST['prod_name']) && isset($_POST['product_desription']) && isset($_POST['quantity']) && isset($_POST['price'])) {
-        $productName = $_POST['prod_name'];
-        $productDescription = $_POST['product_desription'];
-        $quantity = $_POST['quantity'];
-        $price = $_POST['price'];
-        $totalPrice = $quantity * $price;
+  if (isset($_POST['prod_name']) && isset($_POST['quantity'])) {
+    $product_name = $_POST['prod_name'];
+    $quantity = $_POST['quantity'];
+    $product_description = $_POST['product_description'];
+    $price = $_POST['price'];
+    $total_price = $price * $quantity;
+
+    // Validate the inputs (you can add more validation if needed)
+    if (empty($product_name) || empty($quantity)) {
+      echo "Product Name and quantity are required.";
     } else {
-        header('Location:shop.php');
+
+      // Check if the product exists
+      if ($result->num_rows > 0) {
+        $product = $result->fetch_assoc();
+        // Insert the cart item into the database
+        $stmt = $conn->prepare("INSERT INTO invoice_items (customer_name, product_name, quantity) VALUES (?, ?, ?)");
+        $stmt->bind_param("ssi", $customerName, $product_name, $quantity);
+        $stmt->execute();
+
+        // Redirect back to shop.php
+        header('Location: shop.php');
+        exit;
+      } else {
+        echo "Product not found.";
+      }
     }
+  }
 }
 ?>
 
@@ -37,13 +67,51 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--***************************************************************-->
+    <!--Developer Nikita Munjal of  Astral Website 2023 -->
+    <!--***************************************************************-->
+    <!-- <link rel="stylesheet" href="css/style1.css">-->
+    <link rel="stylesheet" href="css/style2.css" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="nikita" content="onlinebusiness">
+    <meta name="cloths" content="HTML, CSS, PHP">
+    <!-- Self Reloading a page -->
+    <meta http-equiv="refresh" content="10000">
     <title>Shopping Cart</title>
 </head>
 
+
+
 <body>
+    <!--This is the header/ banner section of the web page-->
+    <header>
+      <img src="image/banner.jpg" alt="onlinebusiness Banner gif" />
+    </header>
+
+    <nav>
+          <ul>                       
+            <?php
+            // //These links below will appear if the user has global admin rights. 
+            // //This is desidned by user_name but ideally should be used with a role defined and better to reflect this in the table 
+              $user_name = $_SESSION['user_name'];
+                // $user_name = "aaa"; 
+                if ($user_name === "aaa") {
+                  echo '<li><a href="addproduct.php">Add Product</a></li>';
+                  echo '<li><a href="admin_dashboard.php">Admin Dashboard</a></li>';
+                  echo "Logged in as admin to view 2 extra links";
+                }
+            ?>
+          <li><a href="shop.php">Shop</a></li>
+           <li><a href="update.php">Account Update</a></li>
+           <li><a href="logout.php">log out</a></li>
+          </ul>
+        </nav>
+
+
+
+
     <h1>Your Shopping Cart</h1>
     <p><strong>Customer Name:</strong> <?php echo $customerName; ?></p>
     <p><strong>Customer Email:</strong> <?php echo $customerEmail; ?></p>
@@ -59,17 +127,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <th>Total Price</th>
         </tr>
         <tr>
-            <td><?php echo $productName; ?></td>
-            <td><?php echo $productDescription; ?></td>
+            <td><?php echo $product_name; ?></td>
+            <td><?php echo  $product_description; ?></td> 
             <td><?php echo $quantity; ?></td>
             <td>$<?php echo $price; ?></td>
-            <td>$<?php echo $totalPrice; ?></td>
+            <td>$<?php echo $total_price; ?></td>
         </tr>
     </table>
 
-    <form method="post" action="insert_invoice_item.php">
+    <form method="post" action="#">
       <input type="hidden" name="customer_name" value="<?php echo $customerName; ?>">
-      <input type="hidden" name="product_name" value="<?php echo $productName; ?>">
+      <input type="hidden" name="product_name" value="<?php echo $product_name; ?>">
       <input type="hidden" name="quantity" value="<?php echo $quantity; ?>">
       <input type="submit" name="submit" value="Add to Invoice and Continue Shopping">
     </form>
@@ -93,9 +161,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       </pre>
       <hr>
       <h3>Code Area</h3>
-        <?php //debugModule() ?>
+        <?php debugModule() ?>
         <?php printMyCode() ?>
   </aside>
 </body>
 
 </html>
+
+
+
+
+
